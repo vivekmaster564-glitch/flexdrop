@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLEXDROP</title>
+   <link rel="shortcut icon" href="saffron.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── DELIVERY BAR ── -->
+  <div class="delivery-bar">🚚 Free delivery on orders above ₹999 &nbsp;|&nbsp; Same-day delivery available</div>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">
+      <div>
+        <div class="logo-text">FLEXDROP</div>
+        <span class="logo-sub">Fresh Indian Grocery</span>
+      </div>
+    </div>
+    <div class="header-right">
+      <input class="search-bar" type="text" placeholder="🔍 Search products..." id="searchInput" oninput="filterProducts()">
+      <button class="cart-btn" onclick="openCart()">
+        🛒 Cart <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+    <button class="custom-order-btn" onclick="toggleCustomPanel()">✏️ Customisible</button>
+  </header>
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Fresh <span>Desi</span> Groceries,<br>Delivered to You</h1>
+      <p>Order fresh Indian staples — dal, rice, atta, masalas & more — right to your doorstep.</p>
+      <span class="hero-badge">🌿 100% Fresh & Quality Guaranteed</span>
+    </div>
+    <div class="hero-emoji">🥘</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 1 — GROCERY
+  ══════════════════════════════════════════ -->
+  <div class="section-title">🏪 Shop by Category</div>
+  <div class="categories" id="categories">
+    <button class="cat-btn active" onclick="filterCat('All', this)">🛒 All</button>
+    <button class="cat-btn" onclick="filterCat('Grains & Dal', this)">🌾 Grains & Dal</button>
+    <button class="cat-btn" onclick="filterCat('Pickles', this)">🥒 Pickles</button>
+    <button class="cat-btn" onclick="filterCat('Oil & Ghee', this)">🫙 Oil & Ghee</button>
+    <button class="cat-btn" onclick="filterCat('Vegetables', this)">🥦 Vegetables</button>
+    <button class="cat-btn" onclick="filterCat('Dairy', this)">🥛 Dairy</button>
+    <button class="cat-btn" onclick="filterCat('Snacks', this)">🍿 Snacks</button>
+    <button class="cat-btn" onclick="filterCat('Beverages', this)">☕ Beverages</button>
+    <button class="cat-btn" onclick="filterCat('Personal Care', this)">🧴 Personal Care</button>
+    <button class="cat-btn" onclick="filterCat('Cleaning', this)">🧺 Cleaning</button>
+  </div>
+
+  <div class="section-title" id="productsHeading">🔥 All Products</div>
+  <div class="products-grid" id="productsGrid"></div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 2 — STATIONERY
+  ══════════════════════════════════════════ -->
+  <div class="section-title stationery-title">✏️ Stationery & School Supplies</div>
+
+  <div class="section-banner stationery-banner">
+    <div class="section-banner-icon">📚</div>
+    <p><strong>School, Office & Art Supplies</strong>Notebooks, pens, art materials and everything you need — delivered fast.</p>
+  </div>
+
+  <div class="categories" style="margin-top:12px;">
+    <button class="cat-btn stationery-cat active" onclick="filterStationery('All',this)">📦 All Stationery</button>
+    <button class="cat-btn stationery-cat" onclick="filterStationery('Writing',this)">🖊️ Writing</button>
+    <button class="cat-btn stationery-cat" onclick="filterStationery('Notebooks',this)">📓 Notebooks</button>
+    <button class="cat-btn stationery-cat" onclick="filterStationery('Art',this)">🎨 Art</button>
+    <button class="cat-btn stationery-cat" onclick="filterStationery('Office',this)">📁 Office</button>
+  </div>
+
+  <div class="products-grid" id="stationeryGrid"></div>
+
+  <!-- ══════════════════════════════════════════
+       SECTION 3 — MEDICINE & FIRST AID
+  ══════════════════════════════════════════ -->
+  <div class="section-title medicine-title">🏥 Medicine & First Aid</div>
+
+  <div class="section-banner medicine-banner">
+    <div class="section-banner-icon">💊</div>
+    <p><strong>OTC Medicines, First Aid & Health Essentials</strong>Basic healthcare products, antiseptics, bandages, and wellness items delivered to your door.</p>
+  </div>
+
+  <div class="medicine-disclaimer">
+    ⚠️ <strong>Important:</strong> FlexDrop only delivers OTC (Over-the-Counter) medicines and first-aid products.
+    Prescription drugs, controlled substances, and restricted medications are <strong>not available</strong>.
+    Always consult a doctor before self-medicating.
+  </div>
+
+  <div class="categories" style="margin-top:12px;">
+    <button class="cat-btn medicine-cat active" onclick="filterMedicine('All',this)">💊 All</button>
+    <button class="cat-btn medicine-cat" onclick="filterMedicine('FirstAid',this)">🩹 First Aid</button>
+    <button class="cat-btn medicine-cat" onclick="filterMedicine('OTC',this)">💊 OTC Tablets</button>
+    <button class="cat-btn medicine-cat" onclick="filterMedicine('Topical',this)">🧴 Creams & Gels</button>
+    <button class="cat-btn medicine-cat" onclick="filterMedicine('Hygiene',this)">🤲 Hygiene</button>
+  </div>
+
+  <div class="products-grid" id="medicineGrid"></div>
+
+  <!-- ══════════════════════════════════════════
+       CART OVERLAY & DRAWER
+  ══════════════════════════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+  <div class="cart-drawer" id="cartDrawer">
+
+    <!-- PANEL 1: CART -->
+    <div class="panel" id="panelCart">
+      <div class="drawer-header">
+        <h2>🛒 Your Cart</h2>
+        <button class="close-x" onclick="closeCart()">✕</button>
+      </div>
+      <div class="drawer-body" id="cartItems">
+        <div class="empty-cart"><span>🛒</span>Your cart is empty.<br>Add items to get started!</div>
+      </div>
+      <div class="drawer-footer" id="cartFooter" style="display:none">
+        <div class="summary-rows">
+          <div class="sum-row"><span>Subtotal</span><span id="subtotal">₹0</span></div>
+          <div class="sum-row"><span>Delivery</span><span id="delivery">₹40</span></div>
+          <div class="sum-row"><span>Discount</span><span id="discount" class="green">-₹0</span></div>
+          <div class="sum-row total-row"><span>Total</span><span id="total">₹0</span></div>
+        </div>
+        <button class="place-order-btn orange-btn" onclick="goPanel('panelAddress')">☑️ Proceed to Checkout</button>
+      </div>
+    </div>
+
+    <!-- PANEL 2: ADDRESS -->
+    <div class="panel hidden" id="panelAddress">
+      <div class="drawer-header">
+        <button class="back-arrow" onclick="goPanel('panelCart')">←</button>
+        <h2>Delivery Address</h2>
+        <div class="step-pip">
+          <div class="pip active"></div><div class="pip"></div><div class="pip"></div>
+        </div>
+        <button class="close-x" onclick="closeCart()">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-card">
+          <div class="form-card-title">📍 Address Type</div>
+          <div class="addr-type-row">
+            <div class="atype sel" onclick="selAddrType(this)"><span>🏠</span>Home</div>
+            <div class="atype" onclick="selAddrType(this)"><span>💼</span>Work</div>
+            <div class="atype" onclick="selAddrType(this)"><span>📦</span>Other</div>
+          </div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-title">👤 Personal Details</div>
+          <div class="fld"><label>Full Name *</label><input type="text" id="fName" placeholder="Rahul Kumar"></div>
+          <div class="fld">
+            <label>Phone *</label>
+            <div class="cc-phone">
+              <select id="fCC" class="cc-select">
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+971">🇦🇪 +971</option>
+              </select>
+              <input type="tel" id="fPhone" placeholder="98765 43210" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'')">
+            </div>
+          </div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-title">🏘️ Address Details</div>
+          <div class="fld"><label>Flat / House & Building *</label><input type="text" id="fLine1" placeholder="B-12, Shree Apartments"></div>
+          <div class="fld"><label>Street / Area / Colony</label><input type="text" id="fLine2" placeholder="Civil Lines, Near City Mall"></div>
+          <div class="two-col">
+            <div class="fld"><label>City *</label><input type="text" id="fCity" placeholder="Jamshedpur"></div>
+            <div class="fld"><label>PIN Code *</label><input type="tel" id="fPin" placeholder="831001" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'')"></div>
+          </div>
+          <div class="fld">
+            <label>State</label>
+            <select id="fState">
+              <option>Jharkhand</option><option>Uttar Pradesh</option><option>Delhi</option>
+              <option>Maharashtra</option><option>Karnataka</option><option>Tamil Nadu</option>
+              <option>Gujarat</option><option>Rajasthan</option><option>West Bengal</option>
+              <option>Madhya Pradesh</option><option>Bihar</option>
+            </select>
+          </div>
+          <div class="fld"><label>Landmark (optional)</label><input type="text" id="fLandmark" placeholder="Near Hanuman Mandir"></div>
+        </div>
+        <div class="err-msg" id="addrErr"></div>
+      </div>
+      <div class="drawer-footer">
+        <button class="place-order-btn orange-btn" onclick="submitAddress()">Send OTP on WhatsApp 💬</button>
+      </div>
+    </div>
+
+    <!-- PANEL 3: OTP -->
+    <div class="panel hidden" id="panelOtp">
+      <div class="drawer-header">
+        <button class="back-arrow" onclick="goPanel('panelAddress')">←</button>
+        <h2>Verify Number</h2>
+        <div class="step-pip">
+          <div class="pip"></div><div class="pip active"></div><div class="pip"></div>
+        </div>
+        <button class="close-x" onclick="closeCart()">✕</button>
+      </div>
+      <div class="drawer-body" style="align-items:center;">
+        <div class="otp-hero-card">
+          <div style="font-size:48px;">💬</div>
+          <div class="otp-sent-to">OTP sent to <span id="otpSentTo">+91 XXXXXXXXXX</span></div>
+          <div class="demo-badge">⚡ DEMO OTP: <strong id="demoOtpShow">——</strong></div>
+        </div>
+        <div class="form-card" style="width:100%">
+          <div class="form-card-title">🔐 Enter 6-digit OTP</div>
+          <div class="otp-boxes">
+            <input class="ob" type="tel" maxlength="1" id="ob0" oninput="otpNext(0,this)" onkeydown="otpBack(0,event)">
+            <input class="ob" type="tel" maxlength="1" id="ob1" oninput="otpNext(1,this)" onkeydown="otpBack(1,event)">
+            <input class="ob" type="tel" maxlength="1" id="ob2" oninput="otpNext(2,this)" onkeydown="otpBack(2,event)">
+            <input class="ob" type="tel" maxlength="1" id="ob3" oninput="otpNext(3,this)" onkeydown="otpBack(3,event)">
+            <input class="ob" type="tel" maxlength="1" id="ob4" oninput="otpNext(4,this)" onkeydown="otpBack(4,event)">
+            <input class="ob" type="tel" maxlength="1" id="ob5" oninput="otpNext(5,this)" onkeydown="otpBack(5,event)">
+          </div>
+          <div class="resend-row">
+            <span id="timerTxt">Resend in <b id="timerSec">30</b>s</span>
+            <button class="resend-btn" id="resendBtn" onclick="resendOtp()">Resend OTP</button>
+          </div>
+          <div class="err-msg" id="otpErr"></div>
+          <div class="verified-pill" id="verifiedPill" style="display:none">✅ Number verified!</div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="place-order-btn orange-btn" onclick="verifyOtp()">✅ Verify & Continue</button>
+      </div>
+    </div>
+
+    <!-- PANEL 4: PAYMENT -->
+    <div class="panel hidden" id="panelPay">
+      <div class="drawer-header">
+        <button class="back-arrow" onclick="goPanel('panelOtp')">←</button>
+        <h2>Payment</h2>
+        <div class="step-pip">
+          <div class="pip"></div><div class="pip"></div><div class="pip active"></div>
+        </div>
+        <button class="close-x" onclick="closeCart()">✕</button>
+      </div>
+      <div class="drawer-body">
+        <div class="form-card">
+          <div class="form-card-title">🧾 Order Summary</div>
+          <div id="payMiniSummary"></div>
+          <hr class="divider">
+          <div class="sum-row"><span>Subtotal</span><span id="pSub">₹0</span></div>
+          <div class="sum-row"><span>Delivery</span><span id="pDel" class="green">FREE</span></div>
+          <div class="sum-row"><span>Discount</span><span id="pDisc" class="green">-₹0</span></div>
+          <div class="sum-row total-row"><span>Total</span><span id="pTot">₹0</span></div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-title">📍 Delivering To</div>
+          <div id="addrRecap" class="addr-recap-text"></div>
+        </div>
+        <div class="form-card">
+          <div class="form-card-title">💳 Payment Method</div>
+          <div class="pay-opt sel" id="po_upi" onclick="selPay('upi')">
+            <div class="pay-icon" style="background:#E3F2FD">📱</div>
+            <div class="pay-info"><div class="pay-name">UPI</div><div class="pay-sub">GPay · PhonePe · Paytm</div></div>
+            <div class="radio-dot"></div>
+          </div>
+          <div class="upi-field" id="upiField">
+            <div class="fld"><label>UPI ID</label><input type="text" id="upiId" placeholder="yourname@upi"></div>
+          </div>
+          <div class="pay-opt" id="po_card" onclick="selPay('card')">
+            <div class="pay-icon" style="background:#FCE4EC">💳</div>
+            <div class="pay-info"><div class="pay-name">Credit / Debit Card</div><div class="pay-sub">Visa · Mastercard · RuPay</div></div>
+            <div class="radio-dot"></div>
+          </div>
+          <div class="pay-opt" id="po_nb" onclick="selPay('nb')">
+            <div class="pay-icon" style="background:#E8F5E9">🏦</div>
+            <div class="pay-info"><div class="pay-name">Net Banking</div><div class="pay-sub">SBI · HDFC · ICICI & more</div></div>
+            <div class="radio-dot"></div>
+          </div>
+          <div class="pay-opt" id="po_cod" onclick="selPay('cod')">
+            <div class="pay-icon" style="background:#FFF3E0">💵</div>
+            <div class="pay-info"><div class="pay-name">Cash on Delivery</div><div class="pay-sub">Pay when order arrives</div></div>
+            <div class="radio-dot"></div>
+          </div>
+          <div class="err-msg" id="payErr"></div>
+        </div>
+      </div>
+      <div class="drawer-footer">
+        <button class="place-order-btn green-btn" id="payBtn" onclick="confirmOrder()">
+          <span class="btn-label" id="payBtnTxt">🔒 Pay ₹0</span>
+          <div class="spinner" id="paySpinner"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- PANEL 5: SUCCESS -->
+    <div class="panel hidden" id="panelSuccess">
+      <div class="drawer-header" style="background:linear-gradient(135deg,#2E7D32,#43A047);">
+        <h2 style="width:100%;text-align:center;">Order Confirmed 🎉</h2>
+      </div>
+      <div class="drawer-body success-body">
+        <div class="success-ring">🎉</div>
+        <h3 class="success-title">Order Placed!</h3>
+        <p class="success-sub">Your order is being packed.<br>Estimated delivery: <strong>Today, 60–90 mins</strong></p>
+        <div class="order-id-card">
+          <div class="oid-label">Order ID</div>
+          <div class="oid-val" id="successOrderId">#FD-000000</div>
+        </div>
+        <div class="eta-bar">🚚 Delivering to <span id="successCity">your city</span></div>
+        <button class="place-order-btn" style="margin-top:8px;" onclick="resetCheckout()">🛒 Continue Shopping</button>
+      </div>
+    </div>
+
+  </div><!-- /cart-drawer -->
+
+  <!-- ── CUSTOM ORDER PANEL ── -->
+  <div class="custom-overlay" id="customOverlay" onclick="closeCustomPanel()"></div>
+  <div class="custom-drawer" id="customDrawer">
+    <div class="custom-header">
+      <h2>✏️ Custom Order</h2>
+      <button class="close-x" style="background:rgba(0,0,0,0.12);color:#1A1200;" onclick="closeCustomPanel()">✕</button>
+    </div>
+    <div class="custom-body">
+      <div class="custom-section">
+        <div class="custom-section-title">📝 Describe Your Items</div>
+        <textarea id="customItemsText" placeholder="List the products you want, e.g.:
+• 2 kg Basmati Rice
+• Amul Butter 500g
+• Fresh tomatoes ~1 kg
+• Any specific brand preferences..."></textarea>
+      </div>
+      <div class="custom-section">
+        <div class="custom-section-title">📷 Upload Product Image (optional)</div>
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" accept="image/*" id="imgInput" onchange="previewImage(event)">
+          <div class="upload-zone-icon">🖼️</div>
+          <div class="upload-zone-text">Tap to upload a photo</div>
+          <div class="upload-zone-hint">Show us a reference image, a list photo, or a product label</div>
+        </div>
+        <img id="imgPreview" alt="Preview">
+        <button id="removeImgBtn" onclick="removeImage()" style="display:none;margin-top:8px;width:100%;background:transparent;border:1.5px solid #F0C0B0;border-radius:10px;padding:7px;font-size:12px;color:#C62828;cursor:pointer;font-weight:600;">✕ Remove Image</button>
+      </div>
+      <div class="disclaimer-box">
+        <strong>⚠️ Restricted Items — Please Read</strong>
+        FlexDrop <strong style="color:#C62828;display:inline;">cannot</strong> deliver: alcohol, tobacco, prescription medicines, illegal or hazardous items, weapons, adult products, or high-value goods. Orders containing restricted items will be <strong style="color:#C62828;display:inline;">cancelled without refund</strong>.
+      </div>
+    </div>
+    <div class="custom-footer">
+      <button class="custom-submit-btn" onclick="submitCustomOrder()">📲 Send Custom Order via WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- ── POLICY POPUP ── -->
+  <div id="policyOverlay" onclick="closePolicyIfBg(event)">
+    <div id="policyModal">
+      <div id="policyModalHead">
+        <span id="policyTitle"></span>
+        <button class="close-x" style="background:rgba(255,255,255,0.22);color:#fff;" onclick="closePolicy()">✕</button>
+      </div>
+      <div id="policyBody"></div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <a href="#" onclick="openPolicy('about');return false;" class="shreya">About Us</a>
+    <a href="#" onclick="openPolicy('privacy');return false;" class="shreya">Privacy and Policies</a>
+    <a href="#" onclick="openPolicy('terms');return false;" class="shreya">Terms &amp; Conditions</a>
+    <a href="#" onclick="openPolicy('return');return false;" class="shreya">Return &amp; refund</a>
+    <a href="#" onclick="openPolicy('contact');return false;" class="shreya">Contact Us</a>
+    <br><br>
+    Made with ❤️ for India &nbsp;|&nbsp; <span>FLEXDROP</span> &nbsp;|&nbsp; &copy; 2026
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    /* ── Stationery sub-filter ── */
+    const stationeryMap = {
+      Writing:   [205,206,207,208,220,221,222,226],
+      Notebooks: [201,202,203,204],
+      Art:       [209,210,223,224,225],
+      Office:    [211,212,213,214,215,216,217,218,219,227,228,229,230],
+    };
+    function filterStationery(group, btn) {
+      document.querySelectorAll('.stationery-cat').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const ids = stationeryMap[group];
+      const grid = document.getElementById('stationeryGrid');
+      const list = ids ? stationeryProducts.filter(p => ids.includes(p.id)) : stationeryProducts;
+      grid.innerHTML = list.map(renderProductCard).join('');
+    }
+
+    /* ── Medicine sub-filter ── */
+    const medicineMap = {
+      FirstAid: [304,305,306,307,308,309,310,320,327,328,329,330],
+      OTC:      [311,312,313,314,315,322,323,326],
+      Topical:  [301,302,303,316,317,318,319,321],
+      Hygiene:  [324,325,327,328,329],
+    };
+    function filterMedicine(group, btn) {
+      document.querySelectorAll('.medicine-cat').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const ids = medicineMap[group];
+      const grid = document.getElementById('medicineGrid');
+      const list = ids ? medicineProducts.filter(p => ids.includes(p.id)) : medicineProducts;
+      grid.innerHTML = list.map(renderProductCard).join('');
+    }
+  </script>
+
+</body>
+</html>
