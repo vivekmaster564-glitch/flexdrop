@@ -7,8 +7,8 @@ const CONFIG = {
   WA_API_URL: 'https://api.twilio.com/2010-04-01/Accounts/YOUR_ACCOUNT_SID/Messages.json',
   WA_AUTH: 'Basic ' + btoa('YOUR_ACCOUNT_SID:YOUR_AUTH_TOKEN'),
   WA_FROM_NUMBER: 'whatsapp:+14155238886',
-  SHOPKEEPER_NUMBER: 'whatsapp:+919876543210',
-  DELIVERY_NUMBER: 'whatsapp:+919876543211',
+  SHOPKEEPER_NUMBER: 'whatsapp:+917481028341',
+  DELIVERY_NUMBER: 'whatsapp:+917481028341',
   DEMO_MODE: true,
 };
 
